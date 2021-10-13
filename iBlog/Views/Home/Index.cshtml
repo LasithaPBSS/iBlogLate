@@ -1,0 +1,105 @@
+﻿
+@model IEnumerable<iBlog.Models.UserBlog>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>iBlog</h1>
+    <p class="lead">Make your blog  with   easier....!</p>
+    <p><a href="@Url.Action("Index", "Blog")" class="btn btn-primary btn-lg">Write Blog &raquo;</a></p>
+    
+</div>
+<p style="border-style: double;">List of  Blogs</p>
+<div class="row">
+@foreach (iBlog.Models.UserBlog ib in Model)
+{
+  
+    <div class="col-md-4">
+      
+        <h2 id="BlogID" hidden="hidden">@ib.BlogID</h2>
+        <h2><img src="~/Images/Blog.png" alt="Image" style="overflow: hidden; position: relative; width:50px; height:50px;" />@ib.BlogHeader</h2>
+        <p>
+            @ib.BlogText
+        </p>
+        
+        <input type="button" class="btn btn-default" value="Comments" onclick="location.href='@Url.Action("Index", "Read")?BlogID=' + $('#BlogID').html()" />
+     
+    </div>
+}
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script type="text/javascript">
+        $("body").on("click", "#btnComments", function () {
+
+        alert("ok");
+
+            //Reference the Name and Country TextBoxes.
+        var bID = $("#BlogID");
+       // var BlogHeader = $("#BlogHeader");
+
+            //Get the reference of the Table's TBODY element.
+        //var BlogText = $("#BlogText");
+      
+        $.ajax({
+            type: "GET",
+            url: "/Read/Index",
+            data: { BlogID: bID.html() },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+                alert(r + " record(s) inserted.");
+            }
+        });
+
+
+        });
+
+        function Remove(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            var name = $("TD", row).eq(0).html();
+            if (confirm("Do you want to delete: " + name)) {
+                //Get the reference of the Table.
+                var table = $("#tblCustomers")[0];
+
+                //Delete the Table row using it's Index.
+                table.deleteRow(row[0].rowIndex);
+            }
+        };
+
+        $("body").on("click", "#btnSave", function () {
+            //Loop through the Table rows and build a JSON array.
+            var customers = new Array();
+            $("#tblCustomers TBODY TR").each(function () {
+                var row = $(this);
+                var customer = {};
+                customer.Name = row.find("TD").eq(0).html();
+                customer.Country = row.find("TD").eq(1).html();
+                customers.push(customer);
+            });
+
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/Home/InsertCustomers",
+                data: JSON.stringify(customers),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    alert(r + " record(s) inserted.");
+                }
+            });
+        });
+    </script>
+
+
+
+
+}

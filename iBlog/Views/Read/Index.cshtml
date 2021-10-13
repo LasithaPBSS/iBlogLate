@@ -1,0 +1,54 @@
+﻿@using iBlog.Models
+@model CommentsViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>iBlog</h1>
+    <p class="lead">Make your blog  with   easier....!</p>
+
+   
+    @Html.TextBoxFor(m => m.ID, new { @class = "hidden" })
+ 
+
+
+    <p> <textarea id="txtComment" name="Comment" type="text" class="form-control" style="width: 1000px;" placeholder="Comments ......" /></textarea></p> 
+
+    <input type="button" value="Post >>" class="btn btn-primary btn-lg" onclick="location.href='@Url.Action("CommentPost", "Read")?id=' +$('#ID').val() + '&Comment=' +$('#txtComment').val()" />
+
+
+
+
+</div>
+<p  style="border-style: double;">List of  Comments</p>
+<div class="row">
+@foreach (var UserComment in Model.UserComment)
+{
+    <div class="col-md-4">
+      
+        <p>
+            <img src="~/Images/Comment.png" alt="Image" style="overflow: hidden; position: relative; width:50px; height:50px;" /> @UserComment.Comments
+        </p>
+      
+    </div>
+
+}
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+   
+
+
+
+
+}
+

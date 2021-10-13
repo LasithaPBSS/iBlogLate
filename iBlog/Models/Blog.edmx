@@ -1,0 +1,387 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BlogModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoginID" Type="varchar" MaxLength="12" />
+          <Property Name="UserName" Type="varchar" MaxLength="28" />
+          <Property Name="UserPassword" Type="varchar" MaxLength="65" />
+          <Property Name="eMail" Type="varchar" MaxLength="65" />
+          <Property Name="ResetPassword" Type="bit" Nullable="false" />
+          <Property Name="RecDate" Type="datetime" />
+          <Property Name="LastLogin" Type="datetime" />
+          <Property Name="UserRoleId" Type="int" />
+          <Property Name="IsSearch" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="IsSave" Type="bit" Nullable="false" />
+          <Property Name="IsEdit" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="TextExtra1" Type="varchar" MaxLength="50" />
+          <Property Name="FloatExtra1" Type="float" />
+        </EntityType>
+        <EntityType Name="SystemUserRoles">
+          <Key>
+            <PropertyRef Name="RowID" />
+          </Key>
+          <Property Name="RowID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="ModifyDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Blog.dbo.UserBlog' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="UserBlog">
+          <Key>
+            <PropertyRef Name="BlogID" />
+            <PropertyRef Name="CreateDate" />
+            <PropertyRef Name="PublishDate" />
+            <PropertyRef Name="IsActive" />
+          </Key>
+          <Property Name="BlogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="PublishDate" Type="datetime" Nullable="false" />
+          <Property Name="BlogHeader" Type="varchar" MaxLength="250" />
+          <Property Name="BlogText" Type="varchar(max)" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserComments">
+          <Key>
+            <PropertyRef Name="RowID" />
+          </Key>
+          <Property Name="RowID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BlogID" Type="int" Nullable="false" />
+          <Property Name="Comments" Type="varchar(max)" />
+          <Property Name="CommentUserID" Type="int" Nullable="false" />
+        </EntityType>
+        <Function Name="Blog_Select" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SystemUser_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LoginID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="UserPassword" Type="varchar" Mode="In" />
+          <Parameter Name="eMail" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SystemUser_Select" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="eMail" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="UserBlog_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="BlogText" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="UserComment_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BlogID" Type="int" Mode="In" />
+          <Parameter Name="Comments" Type="varchar(max)" Mode="In" />
+          <Parameter Name="CommentUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UserComment_Select" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BlogID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UserWriteBlog_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BlogID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UserWriteBlog_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="BlogText" Type="varchar(max)" Mode="In" />
+          <Parameter Name="BlogID" Type="int" Mode="In" />
+          <Parameter Name="BlogHeader" Type="varchar(max)" Mode="In" />
+        </Function>
+        <EntityContainer Name="BlogModelStoreContainer">
+          <EntitySet Name="SystemUser" EntityType="Self.SystemUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemUserRoles" EntityType="Self.SystemUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserComments" EntityType="Self.UserComments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserBlog" EntityType="Self.UserBlog" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [UserBlog].[BlogID] AS [BlogID], 
+    [UserBlog].[UserID] AS [UserID], 
+    [UserBlog].[UserName] AS [UserName], 
+    [UserBlog].[CreateDate] AS [CreateDate], 
+    [UserBlog].[PublishDate] AS [PublishDate], 
+    [UserBlog].[BlogHeader] AS [BlogHeader], 
+    [UserBlog].[BlogText] AS [BlogText], 
+    [UserBlog].[IsActive] AS [IsActive]
+    FROM [dbo].[UserBlog] AS [UserBlog]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BlogModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoginID" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" MaxLength="28" FixedLength="false" Unicode="false" />
+          <Property Name="UserPassword" Type="String" MaxLength="65" FixedLength="false" Unicode="false" />
+          <Property Name="eMail" Type="String" MaxLength="65" FixedLength="false" Unicode="false" />
+          <Property Name="ResetPassword" Type="Boolean" Nullable="false" />
+          <Property Name="RecDate" Type="DateTime" Precision="3" />
+          <Property Name="LastLogin" Type="DateTime" Precision="3" />
+          <Property Name="UserRoleId" Type="Int32" />
+          <Property Name="IsSearch" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="IsSave" Type="Boolean" Nullable="false" />
+          <Property Name="IsEdit" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="TextExtra1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FloatExtra1" Type="Double" />
+        </EntityType>
+        <EntityType Name="SystemUserRole">
+          <Key>
+            <PropertyRef Name="RowID" />
+          </Key>
+          <Property Name="RowID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="ModifyDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="UserBlog">
+          <Key>
+            <PropertyRef Name="BlogID" />
+            <PropertyRef Name="CreateDate" />
+            <PropertyRef Name="PublishDate" />
+            <PropertyRef Name="IsActive" />
+          </Key>
+          <Property Name="BlogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PublishDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="BlogHeader" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="BlogText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="BlogEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SystemUsers" EntityType="Self.SystemUser" />
+          <EntitySet Name="SystemUserRoles" EntityType="Self.SystemUserRole" />
+          <EntitySet Name="UserBlogs" EntityType="Self.UserBlog" />
+          <FunctionImport Name="Blog_Select" ReturnType="Collection(BlogModel.Blog_Select_Result)">
+          <Parameter Name="UserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SystemUser_Insert">
+            <Parameter Name="LoginID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="UserPassword" Mode="In" Type="String" />
+            <Parameter Name="eMail" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SystemUser_Select" ReturnType="Collection(BlogModel.SystemUser_Select_Result)">
+          <Parameter Name="eMail" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UserBlog_Insert">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="BlogText" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UserWriteBlog_Insert">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="BlogText" Mode="In" Type="String" />
+            <Parameter Name="BlogID" Mode="In" Type="Int32" />
+            <Parameter Name="BlogHeader" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UserWriteBlog_Delete">
+          <Parameter Name="BlogID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="UserComment_Select" ReturnType="Collection(BlogModel.UserComment_Select_Result)">
+          <Parameter Name="BlogID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="UserComments" EntityType="BlogModel.UserComment" />
+          <FunctionImport Name="UserComment_Insert">
+            <Parameter Name="BlogID" Mode="In" Type="Int32" />
+            <Parameter Name="Comments" Mode="In" Type="String" />
+            <Parameter Name="CommentUserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="Blog_Select_Result">
+          <Property Type="Int32" Name="BlogID" Nullable="false" />
+          <Property Type="Int32" Name="UserID" Nullable="true" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="PublishDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="BlogHeader" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="BlogText" Nullable="true" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SystemUser_Select_Result">
+          <Property Type="Int64" Name="ID" Nullable="false" />
+          <Property Type="String" Name="LoginID" Nullable="true" MaxLength="12" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="28" />
+          <Property Type="String" Name="UserPassword" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="eMail" Nullable="true" MaxLength="65" />
+          <Property Type="Boolean" Name="ResetPassword" Nullable="false" />
+          <Property Type="DateTime" Name="RecDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="LastLogin" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="UserRoleId" Nullable="true" />
+          <Property Type="Boolean" Name="IsSearch" Nullable="false" />
+          <Property Type="Boolean" Name="IsDelete" Nullable="false" />
+          <Property Type="Boolean" Name="IsSave" Nullable="false" />
+          <Property Type="Boolean" Name="IsEdit" Nullable="false" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <Property Type="String" Name="TextExtra1" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="FloatExtra1" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="UserComment_Select_Result">
+          <Property Type="Int32" Name="RowID" Nullable="false" />
+          <Property Type="Int32" Name="BlogID" Nullable="false" />
+          <Property Type="String" Name="Comments" Nullable="true" />
+          <Property Type="Int32" Name="CommentUserID" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="UserComment">
+          <Key>
+            <PropertyRef Name="RowID" />
+          </Key>
+          <Property Name="RowID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BlogID" Type="Int32" Nullable="false" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CommentUserID" Type="Int32" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BlogModelStoreContainer" CdmEntityContainer="BlogEntities">
+          <EntitySetMapping Name="SystemUsers">
+            <EntityTypeMapping TypeName="BlogModel.SystemUser">
+              <MappingFragment StoreEntitySet="SystemUser">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LoginID" ColumnName="LoginID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+                <ScalarProperty Name="eMail" ColumnName="eMail" />
+                <ScalarProperty Name="ResetPassword" ColumnName="ResetPassword" />
+                <ScalarProperty Name="RecDate" ColumnName="RecDate" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="UserRoleId" ColumnName="UserRoleId" />
+                <ScalarProperty Name="IsSearch" ColumnName="IsSearch" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsSave" ColumnName="IsSave" />
+                <ScalarProperty Name="IsEdit" ColumnName="IsEdit" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TextExtra1" ColumnName="TextExtra1" />
+                <ScalarProperty Name="FloatExtra1" ColumnName="FloatExtra1" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemUserRoles">
+            <EntityTypeMapping TypeName="BlogModel.SystemUserRole">
+              <MappingFragment StoreEntitySet="SystemUserRoles">
+                <ScalarProperty Name="RowID" ColumnName="RowID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserBlogs">
+            <EntityTypeMapping TypeName="BlogModel.UserBlog">
+              <MappingFragment StoreEntitySet="UserBlog">
+                <ScalarProperty Name="BlogID" ColumnName="BlogID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+                <ScalarProperty Name="BlogHeader" ColumnName="BlogHeader" />
+                <ScalarProperty Name="BlogText" ColumnName="BlogText" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Blog_Select" FunctionName="BlogModel.Store.Blog_Select">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BlogModel.Blog_Select_Result">
+                <ScalarProperty Name="BlogID" ColumnName="BlogID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+                <ScalarProperty Name="BlogHeader" ColumnName="BlogHeader" />
+                <ScalarProperty Name="BlogText" ColumnName="BlogText" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SystemUser_Insert" FunctionName="BlogModel.Store.SystemUser_Insert" />
+          <FunctionImportMapping FunctionImportName="SystemUser_Select" FunctionName="BlogModel.Store.SystemUser_Select">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BlogModel.SystemUser_Select_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LoginID" ColumnName="LoginID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+                <ScalarProperty Name="eMail" ColumnName="eMail" />
+                <ScalarProperty Name="ResetPassword" ColumnName="ResetPassword" />
+                <ScalarProperty Name="RecDate" ColumnName="RecDate" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="UserRoleId" ColumnName="UserRoleId" />
+                <ScalarProperty Name="IsSearch" ColumnName="IsSearch" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsSave" ColumnName="IsSave" />
+                <ScalarProperty Name="IsEdit" ColumnName="IsEdit" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TextExtra1" ColumnName="TextExtra1" />
+                <ScalarProperty Name="FloatExtra1" ColumnName="FloatExtra1" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="UserBlog_Insert" FunctionName="BlogModel.Store.UserBlog_Insert" />
+          <FunctionImportMapping FunctionImportName="UserWriteBlog_Insert" FunctionName="BlogModel.Store.UserWriteBlog_Insert" />
+          <FunctionImportMapping FunctionImportName="UserWriteBlog_Delete" FunctionName="BlogModel.Store.UserWriteBlog_Delete" />
+          <FunctionImportMapping FunctionImportName="UserComment_Select" FunctionName="BlogModel.Store.UserComment_Select">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BlogModel.UserComment_Select_Result">
+                <ScalarProperty Name="RowID" ColumnName="RowID" />
+                <ScalarProperty Name="BlogID" ColumnName="BlogID" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="CommentUserID" ColumnName="CommentUserID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="UserComments">
+            <EntityTypeMapping TypeName="BlogModel.UserComment">
+              <MappingFragment StoreEntitySet="UserComments">
+                <ScalarProperty Name="CommentUserID" ColumnName="CommentUserID" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="BlogID" ColumnName="BlogID" />
+                <ScalarProperty Name="RowID" ColumnName="RowID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="UserComment_Insert" FunctionName="BlogModel.Store.UserComment_Insert" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,139 @@
+﻿
+@using iBlog.Models
+@model BlogViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("BlogPost", "Blog", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <div class="jumbotron">
+
+        <h1>iBlog</h1>
+        <p class="lead">Make your blog  with   easier....!</p>
+
+     
+
+
+        @Html.TextBoxFor(m => m.ID, new { @class = "hidden" })
+
+      
+            @Html.TextBoxFor(m => m.Header, new { placeholder = "<----Title---->", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Header, "", new { @class = "text-danger" })
+       
+        <br />
+
+  
+    <p class="lead">
+        @Html.TextAreaFor(m => m.Content, new { placeholder = "<-----Content------>", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Content, "", new { @class = "text-danger" })
+    </p>
+
+    @*<p><a href="@Url.Action("BlogPost", "Blog")" class="btn btn-primary btn-lg">Post Blog &raquo;</a></p>*@
+        <input type="submit" name="submit" class="btn btn-primary btn-lg" value="Delete" />
+        <input type="submit" name="submit"class="btn btn-primary btn-lg"  value="Save" />
+       
+           
+       
+
+</div>
+<p style="border-style: double;">List of  My Blog</p>
+<div class="row">
+
+    @foreach (var UserBlog in Model.UserBlog)
+    {
+
+
+    <div class="col-md-4">
+        
+        <h2  id="BlogID" hidden="hidden">@UserBlog.BlogID</h2>
+        <img src="~/Images/Blog.png" alt="Image" style="overflow: hidden; position: relative; width:50px; height:50px;" />   <h2        id="BlogHeader">@UserBlog.BlogHeader</h2>
+        <p id="BlogText" >
+            @UserBlog.BlogText
+        </p>
+        <p><input type="button" name="submit" class="btn btn-default mybtn-style cancel"  value="Edit>>" id="btnedit"/></p>
+
+    </div>
+
+    }
+</div>
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+<script type="text/javascript">
+    $("body").on("click", "#btnedit", function () {
+
+        alert("ok");
+
+            //Reference the Name and Country TextBoxes.
+        var bID = $("#BlogID");
+        var BlogHeader = $("#BlogHeader");
+
+            //Get the reference of the Table's TBODY element.
+        var BlogText = $("#BlogText");
+        alert(bID.html());
+        alert(BlogHeader.html());
+        alert(BlogText.html());
+     
+        $("#ID").val("");
+        $("#Header").val("");
+        $("#Content").val("");
+
+
+        $("#ID").val(bID.html());
+        $("#Header").val(BlogHeader.html());
+        $("#Content").val(BlogText.html());
+
+
+        });
+
+        function Remove(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            var name = $("TD", row).eq(0).html();
+            if (confirm("Do you want to delete: " + name)) {
+                //Get the reference of the Table.
+                var table = $("#tblCustomers")[0];
+
+                //Delete the Table row using it's Index.
+                table.deleteRow(row[0].rowIndex);
+            }
+        };
+
+        $("body").on("click", "#btnSave", function () {
+            //Loop through the Table rows and build a JSON array.
+            var customers = new Array();
+            $("#tblCustomers TBODY TR").each(function () {
+                var row = $(this);
+                var customer = {};
+                customer.Name = row.find("TD").eq(0).html();
+                customer.Country = row.find("TD").eq(1).html();
+                customers.push(customer);
+            });
+
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/Home/InsertCustomers",
+                data: JSON.stringify(customers),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    alert(r + " record(s) inserted.");
+                }
+            });
+        });
+</script>
+
+
+
+
+}
+
+
+
+
